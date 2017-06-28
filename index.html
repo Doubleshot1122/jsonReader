@@ -19,12 +19,13 @@
         <h1>JSON to HTML Reader</h1>
         <div class="row"><br></div>
         <div class="row"><br></div>
-        <div class="col-md-12 well">
+        <div id="htmlLoad" class="col-md-12 well">
             <p>Load a file and watch your HTML appear here.</p>
         </div>
         <div class="row"><br></div>
         <label for="file">File Input</label>
-        <input type="file" name="" value="">
+        <input id="files" type="file" name="files[]" multiple>
+        <output id="list"></output>
     </div>
 </body>
 
