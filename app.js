@@ -6,6 +6,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 }
 
 $('#files').change(getUploadedFile)
+let htmlData = []
 
 function getUploadedFile(evt) {
   var files = evt.target.files;
@@ -14,14 +15,43 @@ function getUploadedFile(evt) {
 
   var reader = new FileReader();
 
-  console.log(evt);
-  console.log(output);
-  console.log(reader);
-
   reader.onload = function(e) {
-    console.dir(JSON.parse(reader.result), {depth:null});
-    $('#htmlLoad').text(reader.result)
+    let obj = JSON.parse(reader.result);
+    console.log(obj[0].content.content);
+    $('#htmlLoad').text(JSON.stringify(obj));
   }
 
   reader.readAsText(output)
 }
+
+let sampleData = [
+  {"tag":"section",
+    "content":{"tag":"p","content":"Hello world!"}
+  }
+]
+
+function recursiveJsonRead(obj, results=[]) {
+  if (typeof obj.content === 'object') {
+    results.push(obj.tag)
+    obj = obj.content
+    recursiveJsonRead(obj, results)
+  } else {
+    results.push(obj.tag)
+    results.push(obj.content)
+    console.log(results);
+  }
+}
+
+// console.log(sampleData[0].content);
+// console.log(typeof sampleData[0].content.content);
+recursiveJsonRead(sampleData[0])
+
+
+
+
+
+
+
+
+
+// hh
