@@ -17,8 +17,8 @@ function getUploadedFile(evt) {
 
   reader.onload = function(e) {
     let obj = JSON.parse(reader.result);
-    console.log(obj[0].content.content);
-    $('#htmlLoad').text(JSON.stringify(obj));
+    let convertedToHtml = recursiveJsonRead(obj[0])
+    $('#htmlLoad').text('').append(convertedToHtml);
   }
 
   reader.readAsText(output)
@@ -30,28 +30,20 @@ let sampleData = [
   }
 ]
 
-function recursiveJsonRead(obj, results=[]) {
+function recursiveJsonRead(obj, results=[]){
+  // console.log("obj", typeof obj.content);
+  let middle = Math.round(results.length/2)
   if (typeof obj.content === 'object') {
-    results.push(obj.tag)
+    results.splice(middle, 0, `</${obj.tag}>`)
+    results.splice(middle, 0, `<${obj.tag}>`)
     obj = obj.content
     recursiveJsonRead(obj, results)
   } else {
-    results.push(obj.tag)
-    results.push(obj.content)
-    console.log(results);
+    results.splice(middle, 0, `</${obj.tag}>`)
+    results.splice(middle, 0, `${obj.content}`)
+    results.splice(middle, 0, `<${obj.tag}>`)
   }
+  return results.join('');
 }
 
-// console.log(sampleData[0].content);
-// console.log(typeof sampleData[0].content.content);
-recursiveJsonRead(sampleData[0])
-
-
-
-
-
-
-
-
-
-// hh
+// recursiveJsonRead(sampleData[0])
