@@ -31,7 +31,7 @@ let sampleData = [
       "tag": "h2",
       "content": "This file is a bit more complicated because:"
     }
-  },
+  },{"tag":"li", "content": "list item1"},
   {
     "tag": "section",
     "content": {
@@ -68,16 +68,16 @@ function loopOverFileData(array) {
   return finalOutput;
 }
 
-function recursiveJsonRead(obj, results =[]){
+function recursiveJsonRead(obj){
   if (typeof obj.content === 'object') {
-    obj = obj.content
-    return `<${obj.tag}>` + recursiveJsonRead(obj) + `</${obj.tag}>`
+    // obj = obj.content
+    return `<${obj.tag}>` + recursiveJsonRead(obj.content) + `</${obj.tag}>`
 
   } else if (Array.isArray(obj.content)) {
-    // loopOverFileData(obj.content, results)
+    loopOverFileData(obj.content, results)
   }
   else {
-    return `${obj.content}`
+    return `<${obj.tag}> ${obj.content} </${obj.tag}>`
     // results.splice(middle, 0, `</${obj.tag}>`)
     // results.splice(middle, 0, `${obj.content}`)
     // results.splice(middle, 0, `<${obj.tag}>`)
@@ -87,4 +87,4 @@ function recursiveJsonRead(obj, results =[]){
 }
 
 // console.log("LOOP",loopOverFileData(sampleData));
-console.log("SINGLE", recursiveJsonRead(sampleData[1]));
+console.log("SINGLE", recursiveJsonRead(sampleData[2]));
