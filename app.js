@@ -29,28 +29,51 @@ let sampleData = [
     "tag": "section",
     "content": {
       "tag": "h2",
-      "content": "This file is a bit more complicated because:"
+      "content": "Welcome to My Page!"
     }
-  },{"tag":"li", "content": "list item1"},
+  },
   {
     "tag": "section",
-    "content": {
-      "tag": "ol",
-      "content": [
-        {
-          "tag": "li",
-          "content": "There are multiple levels of nesting."
-        },
-        {
-          "tag": "li",
-          "content": "Some keys are at the same level."
-        },
-        {
-          "tag": "li",
-          "content": "The data types are mixed!"
-        }
-      ]
-    }
+    "content": [
+      {
+        "tag": "h3",
+        "content": "My Favorite Things"
+      },
+      {
+        "tag": "ul",
+        "content": [
+          {
+            "tag": "li",
+            "content": "<img src='http://placekitten.com/g/200/200'/>"
+          },
+          {
+            "tag": "li",
+            "content": "<img src='http://placekitten.com/g/201/200'/>"
+          },
+          {
+            "tag": "li",
+            "content": "<img src='http://placekitten.com/g/200/201'/>"
+          }
+        ]
+      },
+      {
+        "tag": "p",
+        "content": [
+          {
+            "tag": "span",
+            "content": "In short, I "
+          },
+          {
+            "tag": "strong",
+            "content": "just love"
+          },
+          {
+            "tag": "span",
+            "content": " kittens!"
+          }
+        ]
+      }
+    ]
   }
 ]
 
@@ -64,9 +87,10 @@ function loopOverFileData(array) {
 }
 
 function recursiveJsonRead(obj){
+  console.log(obj);
   if (Array.isArray(obj.content)) {
     return obj.content.reduce((a,b) => {
-      return a + `<${b.tag}>${b.content}</${b.tag}>`
+      return a + recursiveJsonRead(b)
     },``)
   }else if (typeof obj.content === 'object') {
     // obj = obj.content
@@ -78,9 +102,9 @@ function recursiveJsonRead(obj){
   return results;
 }
 
-//
-// console.log("LOOP",loopOverFileData(sampleData));
-// console.log("SINGLE", recursiveJsonRead(sampleData[2]));
+
+console.log("LOOP",loopOverFileData(sampleData));
+// console.log("SINGLE", recursiveJsonRead(sampleData[1]));
 
 
 
