@@ -59,33 +59,32 @@ function flattenHtmlIndex(index) {
 }
 
 function loopOverFileData(array) {
-  let results = []
-  array.forEach(el => {
-    console.log(el);
-    return recursiveJsonRead(el, results);
+  let finalOutput = []
+  array.forEach(htmlObjElement => {
+    // console.log(htmlObjElement);
+    finalOutput.push(recursiveJsonRead(htmlObjElement))
   })
-  // console.log("RESULTS", results);
+  console.log("finalOutput",finalOutput);
+  return finalOutput;
+}
+
+function recursiveJsonRead(obj, results =[]){
+  if (typeof obj.content === 'object') {
+    obj = obj.content
+    return `<${obj.tag}>` + recursiveJsonRead(obj) + `</${obj.tag}>`
+
+  } else if (Array.isArray(obj.content)) {
+    // loopOverFileData(obj.content, results)
+  }
+  else {
+    return `${obj.content}`
+    // results.splice(middle, 0, `</${obj.tag}>`)
+    // results.splice(middle, 0, `${obj.content}`)
+    // results.splice(middle, 0, `<${obj.tag}>`)
+  }
+  console.log("results", results);
   return results;
 }
 
-function recursiveJsonRead(obj, results){
-  let middle = Math.round(results.length/2)
-  if (typeof obj.content === 'object') {
-    results.splice(middle, 0, `</${obj.tag}>`)
-    results.splice(middle, 0, `<${obj.tag}>`)
-    obj = obj.content
-    recursiveJsonRead(obj, results)
-  } else if (Array.isArray(obj.content)) {
-    loopOverFileData(obj.content, results)
-  }
-  else {
-    results.splice(middle, 0, `</${obj.tag}>`)
-    results.splice(middle, 0, `${obj.content}`)
-    results.splice(middle, 0, `<${obj.tag}>`)
-  }
-  return results.join('');
-}
-
 // console.log("LOOP",loopOverFileData(sampleData));
-loopOverFileData(sampleData)
-// console.log("RECUR",recursiveJsonRead(sampleData[0]));
+console.log("SINGLE", recursiveJsonRead(sampleData[1]));
