@@ -25,20 +25,60 @@ function getUploadedFile(evt) {
 }
 
 let sampleData = [
-  {"tag":"section",
-    "content":{"tag":"p","content":"Hello world!"}
+  {
+    "tag": "section",
+    "content": {
+      "tag": "h2",
+      "content": "This file is a bit more complicated because:"
+    }
+  },
+  {
+    "tag": "section",
+    "content": {
+      "tag": "ol",
+      "content": [
+        {
+          "tag": "li",
+          "content": "There are multiple levels of nesting."
+        },
+        {
+          "tag": "li",
+          "content": "Some keys are at the same level."
+        },
+        {
+          "tag": "li",
+          "content": "The data types are mixed!"
+        }
+      ]
+    }
   }
 ]
 
-function recursiveJsonRead(obj, results=[]){
-  // console.log("obj", typeof obj.content);
+function flattenHtmlIndex(index) {
+  index
+}
+
+function loopOverFileData(array) {
+  let results = []
+  array.forEach(el => {
+    console.log(el);
+    return recursiveJsonRead(el, results);
+  })
+  // console.log("RESULTS", results);
+  return results;
+}
+
+function recursiveJsonRead(obj, results){
   let middle = Math.round(results.length/2)
   if (typeof obj.content === 'object') {
     results.splice(middle, 0, `</${obj.tag}>`)
     results.splice(middle, 0, `<${obj.tag}>`)
     obj = obj.content
     recursiveJsonRead(obj, results)
-  } else {
+  } else if (Array.isArray(obj.content)) {
+    loopOverFileData(obj.content, results)
+  }
+  else {
     results.splice(middle, 0, `</${obj.tag}>`)
     results.splice(middle, 0, `${obj.content}`)
     results.splice(middle, 0, `<${obj.tag}>`)
@@ -46,4 +86,6 @@ function recursiveJsonRead(obj, results=[]){
   return results.join('');
 }
 
-// recursiveJsonRead(sampleData[0])
+// console.log("LOOP",loopOverFileData(sampleData));
+loopOverFileData(sampleData)
+// console.log("RECUR",recursiveJsonRead(sampleData[0]));
